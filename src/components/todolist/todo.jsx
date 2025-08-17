@@ -16,7 +16,7 @@ function handleAdd(){
 const removeTodo = (id)=>{
   dispath(remove(id))
 }
-
+console.log(removeTodo);
 
 const todo = useSelector((state)=>state.todo)
 console.log(todo);
