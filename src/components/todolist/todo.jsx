@@ -1,17 +1,33 @@
 import React, { useState } from 'react'
 import { useDispatch ,useSelector } from 'react-redux'
-import { addTodo, remove  } from '../../store/slices/todoSlice/todoSlice'
+import { addTodo, remove ,editTodo} from '../../store/slices/todoSlice/todoSlice'
 
 function todo() {
 const [input,setInput]=useState('')
+const [editId, setEditingId]=useState(null)
+const [editText, setEditText]=useState('')
 const dispath = useDispatch()
 function handleAdd(){
+
   
     dispath(addTodo({input}))
 
     setInput('')
 
 }
+const saveEdit = (id,text)=>{
+  dispath(editTodo({id,text}))
+  setEditingId(null)
+  setEditText('')
+
+}
+
+
+const edittodo = (id,text)=>{
+  setEditingId(id)
+  setEditText(text)
+}
+
 
 const removeTodo = (id)=>{
   dispath(remove(id))
@@ -30,10 +46,30 @@ return (
                   <ul>
                     {todo.todo.map((item,index)=>{
                       return(
-                        <div>
+                <>
+
+                <div>
+                  {editId===item.id?
+                  <div>
+                    <input type="text" value={editText} onChange={(e)=>setEditText(e.target.value)} />
+                    <button onClick={()=>saveEdit(editId,editText)}>Save</button>
+                  </div>
+                  :
+                  <div>
+                    <li  style={{color:"red"}} key={index}>{item.text}</li>
+                    <button onClick={remove}>Remove</button>
+                    <button onClick={()=>edittodo(item.id,item.text)}>Edit</button>
+                  </div>
+                  }
+                </div>
+                        {/* <div>
                         <li  style={{color:"red"}} key={index}>{item.text}</li>
                         <button onClick={remove}>Remove</button>
-                        </div>
+                        <button onClick={()=>editTodo(item.id,item.text)}>Edit</button>
+                        </div> */}
+                </>
+
+                
                       )
                     })
 
